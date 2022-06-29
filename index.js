@@ -20,6 +20,19 @@ const app = express();
 app.use(express.static('public'));
 
 
+
+
+app.get("/cuenta/get/", function(req,res){
+    let id = req.query.id;
+    let sql = "SELECT * FROM cuenta WHERE idcuenta = ?";
+    let params = [id];
+    conn.query(sql,params, function (err, results) {
+        if (err) throw err;
+        res.json(results);
+    });
+});
+
+
 app.get("/mascota/get/",function (req,res){
     let id = req.query.id;
     let sql = "SELECT * FROM mascota WHERE idmascota = ?";
@@ -59,7 +72,6 @@ app.post("/mascota/create", bodyParser.json(), (req, res) => {
     let raza_especie_idraza = req.body.raza_especie_idraza;
     let raza_otros = req.body.raza_otros;
     let cuenta_idcuenta = req.body.cuenta_idcuenta;
-
 
     let sql = "insert into mascota SET ?";
     let params = {
