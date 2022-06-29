@@ -54,7 +54,7 @@ app.post("/mascota/create", bodyParser.json(), (req, res) => {
     let raza_especie_idraza = req.body.raza_especie_idraza;
     let raza_otros = req.body.raza_otros;
     let cuenta_idcuenta = req.body.cuenta_idcuenta;
-
+    let a = 2;
     let sql = "insert into mascota SET ?";
     let params = {
         nombre: nombre,
