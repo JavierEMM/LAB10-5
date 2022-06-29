@@ -19,8 +19,8 @@ const app = express();
 
 app.use(express.static('public'));
 
-app.get("/cuenta/get/", function(req,res){
-    let id = req.query.id;
+app.get("/cuenta/get/:idcuenta", function(req,res){
+    let id = req.params.idcuenta;
     let sql = "SELECT * FROM cuenta WHERE idcuenta = ?";
     let params = [id];
     conn.query(sql,params, function (err, results) {
@@ -29,7 +29,7 @@ app.get("/cuenta/get/", function(req,res){
     });
 });
 
-app.get("/cuenta/get/lista", function(req,res){
+app.get("/cuenta/get", function(req,res){
     let sql = "SELECT * FROM cuenta";
     conn.query(sql, function (err, results) {
         if (err) throw err;
@@ -38,8 +38,8 @@ app.get("/cuenta/get/lista", function(req,res){
 });
 
 
-app.get("/mascota/get/",function (req,res){
-    let id = req.query.id;
+app.get("/mascota/get/:idmascota",function (req,res){
+    let id = req.params.idmascota;
     let sql = "SELECT * FROM mascota WHERE idmascota = ?";
     let params = [id];
 
@@ -49,7 +49,7 @@ app.get("/mascota/get/",function (req,res){
     });
 });
 
-app.get("/mascota/get/lista", (req,res) =>{
+app.get("/mascota/get", (req,res) =>{
     let sql = "SELECT * FROM mascota";
     conn.query(sql,function(err,result){
         if(err){
@@ -90,9 +90,10 @@ app.post("/mascota/create", bodyParser.json(), (req, res) => {
         cuenta_idcuenta: cuenta_idcuenta,
     };
 
-    conn.query(sql, params, (e) => {
+    conn.query(sql, params, (e,result) => {
         if (e) throw e;
-        conn.query("select * from mascota", (err, resultado) => {
+        let param = [result.insertId];
+        conn.query("select * from mascota where idmascota = ?",param, (err, resultado) => {
             if (err) throw err;
             res.json(resultado);
         });
@@ -113,8 +114,9 @@ app.post('/servicio/create/:idmascota',bodyParser.json(),function (req,res){
     let sql="INSERT INTO servicio (mascota_idmascota,cuenta_idcuenta,hora_inicio,duracion,entrega,responsable_idresponsable) VALUES (?,?,?,?,?,?)";
     conn.query(sql,parametros,function (err,result){
         if(err) throw err;
-        let idservicio = result.idservicio;
+        let idservicio = result.insertId;
         let params = [idservicio];
+        console.log()
         conn.query("SELECT * FROM servicio WHERE idservicio = ?",params,function (err,results){
             if(err) throw err;
             res.json(results);
