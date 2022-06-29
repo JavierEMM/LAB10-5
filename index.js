@@ -31,6 +31,24 @@ app.get("/mascota/get/",function (req,res){
     });
 });
 
+app.get("/mascota/get/lista", (req,res) =>{
+    let sql = "SELECT * FROM mascota";
+    conn.query(sql,function(err,result){
+        if(err){
+            res.json({err:"triste por el error" });
+
+        }else{
+            res.json(result);
+        }
+
+    });
+
+});
+
+
+
+
+
 
 app.post("/mascota/create", bodyParser.json(), (req, res) => {
     let nombre = req.body.nombre;
@@ -41,6 +59,7 @@ app.post("/mascota/create", bodyParser.json(), (req, res) => {
     let raza_especie_idraza = req.body.raza_especie_idraza;
     let raza_otros = req.body.raza_otros;
     let cuenta_idcuenta = req.body.cuenta_idcuenta;
+
 
     let sql = "insert into mascota SET ?";
     let params = {
