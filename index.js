@@ -92,14 +92,34 @@ app.post("/mascota/create", bodyParser.json(), (req, res) => {
 
     conn.query(sql, params, (e) => {
         if (e) throw e;
-
         conn.query("select * from mascota", (err, resultado) => {
             if (err) throw err;
             res.json(resultado);
         });
-
     });
 
+});
+
+app.post('/servicio/create/:idmascota',bodyParser.json(),function (req,res){
+
+    let idmascota = req.params.idmascota;
+    let cuentaIdcuenta = req.body.cuenta_idcuenta;
+    let hora = req.body.hora_inicio;
+    let duracion = req.body.duracion;
+    let entrega = req.body.entrega;
+    let responsable = req.body.responsable_idresponsable;
+
+    let parametros = [idmascota,cuentaIdcuenta,hora,duracion,entrega,responsable]
+    let sql="INSERT INTO servicio (mascota_idmascota,cuenta_idcuenta,hora_inicio,duracion,entrega,responsable_idresponsable) VALUES (?,?,?,?,?,?)";
+    conn.query(sql,parametros,function (err,result){
+        if(err) throw err;
+        let idservicio = result.idservicio;
+        let params = [idservicio];
+        conn.query("SELECT * FROM servicio WHERE idservicio = ?",params,function (err,results){
+            if(err) throw err;
+            res.json(results);
+        })
+    });
 });
 
 
