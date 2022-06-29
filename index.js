@@ -19,14 +19,19 @@ const app = express();
 
 app.use(express.static('public'));
 
-
-
-
 app.get("/cuenta/get/", function(req,res){
     let id = req.query.id;
     let sql = "SELECT * FROM cuenta WHERE idcuenta = ?";
     let params = [id];
     conn.query(sql,params, function (err, results) {
+        if (err) throw err;
+        res.json(results);
+    });
+});
+
+app.get("/cuenta/get/lista", function(req,res){
+    let sql = "SELECT * FROM cuenta";
+    conn.query(sql, function (err, results) {
         if (err) throw err;
         res.json(results);
     });
