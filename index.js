@@ -20,6 +20,18 @@ const app = express();
 app.use(express.static('public'));
 
 
+app.get("/mascota/get/",function (req,res){
+    let id = req.query.id;
+    let sql = "SELECT * FROM mascota WHERE idmascota = ?";
+    let params = [id];
+
+    conn.query(sql,params,function(err,results){
+        if(err) throw err;
+        res.json(results);
+    });
+});
+
+
 app.post("/mascota/create", bodyParser.json(), (req, res) => {
     let nombre = req.body.nombre;
     let anho = req.body.anho;
